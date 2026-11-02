@@ -119,6 +119,41 @@ Nous commencerons par des cas simples avec un résultat facile à prévoir.
 7. **Cas avec des coordonnées négatives et décimales**
    - vérifier que le calcul fonctionne aussi avec des coordonnées variées.
 
+### Jeux de données et résultats attendus
+
+Les scénarios suivants définissent les nuages de points utilisés par les tests
+et les résultats qui doivent être vérifiés. Les indices commencent à zéro et
+correspondent à l'ordre des points dans chaque liste.
+
+| Scénario | Points d'entrée | Résultat attendu |
+|---|---|---|
+| Moins de trois points | `[]`, `[(0, 0)]`, `[(0, 0), (1, 1)]` | `[]` |
+| Triangle élémentaire | `[(0, 0), (1, 0), (0.5, 1)]` | 1 triangle, indices `{0, 1, 2}`, aire `0.5` |
+| Carré unité | `[(0, 0), (1, 0), (1, 1), (0, 1)]` | 2 triangles valides, aire totale `1.0` ; les deux diagonales sont acceptées |
+| Points colinéaires | `[(0, 0), (1, 1), (2, 2)]` | `[]` |
+| Points dupliqués | `[(0, 0), (1, 0), (1, 1), (1, 1)]` | aucun triangle dégénéré ; indices distincts et aire strictement positive |
+| Coordonnées négatives | `[(-1, -1), (1, -1), (0, 1)]` | 1 triangle, aire `2.0` |
+| Coordonnées décimales | `[(0.1, 0.2), (1.3, 0.2), (0.7, 1.4)]` | 1 triangle, aire `0.72` |
+| Coordonnées nulles | `[(0, 0), (2, 0), (0, 2)]` | 1 triangle, aire `2.0` |
+| Grandes coordonnées | `[(1000000, 1000000), (1000002, 1000000), (1000000, 1000002)]` | 1 triangle, aire `2.0` |
+| Polygone à cinq points | `[(0, 0), (2, 0), (3, 1), (2, 3), (0, 2)]` | triangles valides, aire totale `6.5` |
+| Point intérieur au carré | `[(0, 0), (2, 0), (2, 2), (0, 2), (1, 1)]` | 4 triangles valides, aire totale `4.0` |
+| Grille `3 x 3` | `(x, y)` pour `y` de `0` à `2` et `x` de `0` à `2` (9 points, de `(0, 0)` à `(2, 2)`) | 8 triangles valides, aire totale `4.0` |
+| Ordre différent | `[(0, 0), (2, 0), (2, 2), (0, 2), (1, 1)]`, puis réordonné selon `[4, 2, 0, 3, 1]` | 4 triangles dans les deux cas, aire totale `4.0` dans les deux cas |
+
+Pour chaque triangle produit, les vérifications communes sont les suivantes :
+
+- il contient exactement trois indices entiers distincts ;
+- chaque indice référence un point du nuage fourni ;
+- son aire est strictement positive ;
+- l'aire totale correspond à la valeur attendue lorsque celle-ci est indiquée.
+
+Lorsque plusieurs triangulations géométriquement valides existent (par
+exemple la diagonale d'un carré), le test ne doit pas imposer un ordre ou une
+diagonale particulière : il vérifie les propriétés géométriques, le nombre de
+triangles et l'aire totale. Pour les cas non ambigus, les indices attendus
+peuvent être comparés directement.
+
 ### Vérifications générales
 
 Pour chaque résultat, nous vérifierons notamment :
@@ -221,7 +256,28 @@ Nous utiliserons plusieurs tailles de jeux de points, par exemple :
 - taille moyenne ;
 - grande taille.
 
-Le but est de comparer le comportement du programme quand le nombre de points augmente.
+Le benchmark utilisera des jeux reproductibles de 100, 500 et 1 000 points.
+Chaque mesure sera exécutée au moins cinq fois ; la médiane sera comparée au
+seuil afin de limiter l'influence d'une exécution ponctuellement lente. Les
+tests seront exécutés sur la même machine que les autres validations, sans
+déduire le temps de démarrage de Python.
+
+Les seuils initiaux d'acceptation sont les suivants :
+
+| Opération | Jeu de données | Temps maximal |
+|---|---:|---:|
+| Décodage d'un `PointSet` | 1 000 points | `0,10 s` |
+| Encodage d'un résultat `Triangles` | 1 000 points et au plus 2 000 triangles | `0,10 s` |
+| Calcul de triangulation | 100 points | `1,00 s` |
+| Calcul de triangulation | 500 points | `5,00 s` |
+| Calcul de triangulation | 1 000 points | `15,00 s` |
+
+Ces limites constituent une base de non-régression : elles laissent une marge
+pour une machine de développement partagée tout en détectant une dégradation
+visible lorsque la taille du nuage augmente. Elles ne constituent pas une
+garantie de temps de réponse HTTP en production. Si le matériel de référence
+change, les mesures et les seuils devront être réévalués ensemble, et non
+modifiés uniquement pour faire passer un test.
 
 Ces tests seront séparés des tests classiques pour pouvoir les lancer uniquement avec :
 
@@ -238,6 +294,21 @@ Objectif :
 - couvrir toutes les parties importantes du code ;
 - notamment les cas normaux et les cas d'erreur ;
 - éviter de chercher uniquement un pourcentage élevé sans vérifier la pertinence des tests.
+
+Le seuil minimal sera fixé à **90 % de couverture des lignes du code source**.
+Ce niveau impose de couvrir le fonctionnement nominal, les cas limites et les
+erreurs principales, tout en laissant une marge raisonnable pour le code
+d'infrastructure difficile à exercer dans les tests unitaires. Les branches
+critiques de validation binaire, de communication avec le `PointSetManager` et
+de calcul de triangulation devront néanmoins être couvertes explicitement :
+un pourcentage global ne pourra pas compenser une fonctionnalité critique
+entièrement non testée.
+
+La couverture ne devra inclure ni les tests eux-mêmes ni les fichiers générés.
+La commande de validation devra échouer si le minimum n'est pas atteint, par
+exemple avec :
+
+`coverage run -m pytest && coverage report --fail-under=90`
 
 La commande prévue sera :
 
