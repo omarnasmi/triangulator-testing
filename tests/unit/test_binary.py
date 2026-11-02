@@ -149,7 +149,7 @@ def test_point_set_round_trip():
 
     encoded = encode_point_set(points)
     decoded = decode_point_set(encoded)
-
+    
     assert decoded == points
 
 

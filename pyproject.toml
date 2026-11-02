@@ -8,3 +8,8 @@ select = [
     "SIM",
     "I",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "performance: tests that measure execution time",
+]
