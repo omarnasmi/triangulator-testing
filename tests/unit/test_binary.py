@@ -38,6 +38,7 @@ def triangle_set_binary(vertices, triangles):
 
 
 def test_encode_empty_point_set():
+"""Test test encode empty point set."""
     points = []
 
     encoded = encode_point_set(points)
@@ -46,6 +47,7 @@ def test_encode_empty_point_set():
 
 
 def test_encode_one_point():
+"""Test test encode one point."""
     points = [(1.0, 2.0)]
 
     encoded = encode_point_set(points)
@@ -56,6 +58,7 @@ def test_encode_one_point():
 
 
 def test_encode_multiple_points():
+"""Test test encode multiple points."""
     points = [
         (0.0, 0.0),
         (10.0, 20.0),
@@ -70,6 +73,7 @@ def test_encode_multiple_points():
 
 
 def test_encode_positive_negative_and_decimal_coordinates():
+"""Test test encode positive negative and decimal coordinates."""
     points = [
         (1.5, 2.75),
         (-10.25, 5.5),
@@ -89,6 +93,7 @@ def test_encode_positive_negative_and_decimal_coordinates():
 
 
 def test_decode_empty_point_set():
+"""Test test decode empty point set."""
     binary_data = struct.pack("<I", 0)
 
     decoded = decode_point_set(binary_data)
@@ -97,6 +102,7 @@ def test_decode_empty_point_set():
 
 
 def test_decode_one_point():
+"""Test test decode one point."""
     points = [(1.0, 2.0)]
 
     binary_data = point_set_binary(points)
@@ -107,6 +113,7 @@ def test_decode_one_point():
 
 
 def test_decode_multiple_points():
+"""Test test decode multiple points."""
     points = [
         (0.0, 0.0),
         (10.0, 20.0),
@@ -121,6 +128,7 @@ def test_decode_multiple_points():
 
 
 def test_decode_positive_negative_and_decimal_coordinates():
+"""Test test decode positive negative and decimal coordinates."""
     points = [
         (1.5, 2.75),
         (-10.25, 5.5),
@@ -140,6 +148,7 @@ def test_decode_positive_negative_and_decimal_coordinates():
 
 
 def test_point_set_round_trip():
+"""Test test point set round trip."""
     points = [
         (0.0, 0.0),
         (10.5, -20.25),
@@ -159,6 +168,7 @@ def test_point_set_round_trip():
 
 
 def test_decode_point_set_rejects_binary_data_shorter_than_count():
+"""Test test decode point set rejects binary data shorter than count."""
     binary_data = b"\x00\x00"
 
     with pytest.raises(ValueError):
@@ -167,6 +177,7 @@ def test_decode_point_set_rejects_binary_data_shorter_than_count():
 
 def test_decode_point_set_rejects_incomplete_point():
     # Count says that one point exists, but no complete point follows.
+"""Test test decode point set rejects incomplete point."""
     binary_data = struct.pack("<I", 1)
 
     with pytest.raises(ValueError):
@@ -175,6 +186,7 @@ def test_decode_point_set_rejects_incomplete_point():
 
 def test_decode_point_set_rejects_incomplete_point_data():
     # Count = 1, but only 4 of the required 8 point bytes are present.
+"""Test test decode point set rejects incomplete point data."""
     binary_data = struct.pack("<I", 1) + struct.pack("<f", 1.0)
 
     with pytest.raises(ValueError):
@@ -183,6 +195,7 @@ def test_decode_point_set_rejects_incomplete_point_data():
 
 def test_decode_point_set_rejects_inconsistent_point_count():
     # Count says 2 points, but only one is present.
+"""Test test decode point set rejects inconsistent point count."""
     points = [(1.0, 2.0)]
 
     binary_data = struct.pack("<I", 2)
@@ -195,6 +208,7 @@ def test_decode_point_set_rejects_inconsistent_point_count():
 
 
 def test_decode_point_set_rejects_extra_data():
+"""Test test decode point set rejects extra data."""
     points = [(1.0, 2.0)]
 
     binary_data = point_set_binary(points)
@@ -210,6 +224,7 @@ def test_decode_point_set_rejects_extra_data():
 
 
 def test_encode_triangle_set_with_no_triangles():
+"""Test test encode triangle set with no triangles."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -225,6 +240,7 @@ def test_encode_triangle_set_with_no_triangles():
 
 
 def test_encode_triangle_set_with_one_triangle():
+"""Test test encode triangle set with one triangle."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -242,6 +258,7 @@ def test_encode_triangle_set_with_one_triangle():
 
 
 def test_encode_triangle_set_with_multiple_triangles():
+"""Test test encode triangle set with multiple triangles."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -266,6 +283,7 @@ def test_encode_triangle_set_with_multiple_triangles():
 
 
 def test_decode_triangle_set_with_no_triangles():
+"""Test test decode triangle set with no triangles."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -282,6 +300,7 @@ def test_decode_triangle_set_with_no_triangles():
 
 
 def test_decode_triangle_set_with_one_triangle():
+"""Test test decode triangle set with one triangle."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -300,6 +319,7 @@ def test_decode_triangle_set_with_one_triangle():
 
 
 def test_decode_triangle_set_with_multiple_triangles():
+"""Test test decode triangle set with multiple triangles."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -325,6 +345,7 @@ def test_decode_triangle_set_with_multiple_triangles():
 
 
 def test_triangle_set_preserves_vertices():
+"""Test test triangle set preserves vertices."""
     vertices = [
         (-10.5, 20.25),
         (30.75, -40.125),
@@ -346,6 +367,7 @@ def test_triangle_set_preserves_vertices():
 
 
 def test_triangle_set_preserves_triangle_count():
+"""Test test triangle set preserves triangle count."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -369,6 +391,7 @@ def test_triangle_set_preserves_triangle_count():
 
 
 def test_triangle_indices_reference_existing_vertices():
+"""Test test triangle indices reference existing vertices."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -394,6 +417,7 @@ def test_triangle_indices_reference_existing_vertices():
 
 
 def test_triangle_set_round_trip():
+"""Test test triangle set round trip."""
     vertices = [
         (0.0, 0.0),
         (10.5, -20.25),
@@ -418,6 +442,7 @@ def test_triangle_set_round_trip():
 
 
 def test_decode_triangle_set_rejects_binary_data_shorter_than_vertex_count():
+"""Test test decode triangle set rejects binary data shorter than vertex count."""
     binary_data = b"\x00\x00"
 
     with pytest.raises(ValueError):
@@ -426,6 +451,7 @@ def test_decode_triangle_set_rejects_binary_data_shorter_than_vertex_count():
 
 def test_decode_triangle_set_rejects_incomplete_vertex():
     # One vertex is declared, but no vertex data is provided.
+"""Test test decode triangle set rejects incomplete vertex."""
     binary_data = struct.pack("<I", 1)
 
     with pytest.raises(ValueError):
@@ -433,6 +459,7 @@ def test_decode_triangle_set_rejects_incomplete_vertex():
 
 
 def test_decode_triangle_set_rejects_incomplete_triangle_count():
+"""Test test decode triangle set rejects incomplete triangle count."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -446,6 +473,7 @@ def test_decode_triangle_set_rejects_incomplete_triangle_count():
 
 
 def test_decode_triangle_set_rejects_incomplete_triangle():
+"""Test test decode triangle set rejects incomplete triangle."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -463,6 +491,7 @@ def test_decode_triangle_set_rejects_incomplete_triangle():
 
 
 def test_decode_triangle_set_rejects_inconsistent_triangle_count():
+"""Test test decode triangle set rejects inconsistent triangle count."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -482,6 +511,7 @@ def test_decode_triangle_set_rejects_inconsistent_triangle_count():
 
 
 def test_decode_triangle_set_rejects_extra_data():
+"""Test test decode triangle set rejects extra data."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),
@@ -504,6 +534,7 @@ def test_decode_triangle_set_rejects_extra_data():
 
 
 def test_decode_triangle_set_rejects_vertex_index_out_of_range():
+"""Test test decode triangle set rejects vertex index out of range."""
     vertices = [
         (0.0, 0.0),
         (10.0, 0.0),

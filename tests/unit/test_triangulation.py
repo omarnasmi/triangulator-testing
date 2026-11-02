@@ -35,10 +35,12 @@ def assert_valid_triangulation(points, triangles):
     ],
 )
 def test_fewer_than_three_points_produce_no_triangles(points):
+"""Test test fewer than three points produce no triangles."""
     assert triangulate(points) == []
 
 
 def test_three_non_collinear_points_form_one_triangle():
+"""Test test three non collinear points form one triangle."""
     points = [(0.0, 0.0), (1.0, 0.0), (0.5, 1.0)]
 
     triangles = triangulate(points)
@@ -49,6 +51,7 @@ def test_three_non_collinear_points_form_one_triangle():
 
 
 def test_four_points_forming_a_square_produce_two_triangles():
+"""Test test four points forming a square produce two triangles."""
     points = [
         (0.0, 0.0),
         (1.0, 0.0),
@@ -64,12 +67,14 @@ def test_four_points_forming_a_square_produce_two_triangles():
 
 
 def test_collinear_points_produce_no_triangles():
+"""Test test collinear points produce no triangles."""
     points = [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0)]
 
     assert triangulate(points) == []
 
 
 def test_duplicate_points_do_not_produce_degenerate_triangles():
+"""Test test duplicate points do not produce degenerate triangles."""
     points = [
         (0.0, 0.0),
         (1.0, 0.0),
@@ -83,16 +88,18 @@ def test_duplicate_points_do_not_produce_degenerate_triangles():
 
 
 def test_negative_coordinates_are_supported():
+"""Test test negative coordinates are supported."""
     points = [(-1.0, -1.0), (1.0, -1.0), (0.0, 1.0)]
 
     triangles = triangulate(points)
 
     assert len(triangles) == 1
     assert_valid_triangulation(points, triangles)
-    assert triangle_area(points, triangles[0]) == pytest.approx(2.0)
+    assert triangle_areaensure that all the functions have docstrings(points, triangles[0]) == pytest.approx(2.0)
 
 
 def test_decimal_coordinates_are_supported():
+"""Test test decimal coordinates are supported."""
     points = [(0.1, 0.2), (1.3, 0.2), (0.7, 1.4)]
 
     triangles = triangulate(points)
@@ -103,6 +110,7 @@ def test_decimal_coordinates_are_supported():
 
 
 def test_points_with_zero_coordinates_are_supported():
+"""Test test points with zero coordinates are supported."""
     points = [(0.0, 0.0), (2.0, 0.0), (0.0, 2.0)]
 
     triangles = triangulate(points)
@@ -113,6 +121,7 @@ def test_points_with_zero_coordinates_are_supported():
 
 
 def test_large_coordinates_are_handled():
+"""Test test large coordinates are handled."""
     points = [
         (1_000_000.0, 1_000_000.0),
         (1_000_002.0, 1_000_000.0),
@@ -127,6 +136,7 @@ def test_large_coordinates_are_handled():
 
 
 def test_triangulation_of_multiple_points():
+"""Test test triangulation of multiple points."""
     points = [
         (0.0, 0.0),
         (2.0, 0.0),
@@ -143,6 +153,7 @@ def test_triangulation_of_multiple_points():
 
 
 def test_triangulation_of_points_inside_a_square():
+"""Test test triangulation of points inside a square."""
     points = [
         (0.0, 0.0),
         (2.0, 0.0),
@@ -159,6 +170,7 @@ def test_triangulation_of_points_inside_a_square():
 
 
 def test_triangulation_of_points_on_a_grid():
+"""Test test triangulation of points on a grid."""
     points = [
         (x, y)
         for y in range(3)
@@ -173,6 +185,7 @@ def test_triangulation_of_points_on_a_grid():
 
 
 def test_triangulation_of_points_in_different_orders():
+"""Test test triangulation of points in different orders."""
     points = [
         (0.0, 0.0),
         (2.0, 0.0),
