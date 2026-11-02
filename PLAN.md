@@ -335,6 +335,20 @@ La documentation sera générée avec `pdoc3` avec :
 
 `make doc`
 
+### Automatisation avec GitHub Actions
+
+Le workflow GitHub Actions `.github/workflows/ci.yml` sera déclenché
+automatiquement à chaque `push` et à chaque `pull_request`. Il installera les
+dépendances puis exécutera la suite complète de validation :
+
+- `make test` pour les tests ;
+- `make coverage` pour vérifier le seuil minimal de 90 % ;
+- `make lint` pour contrôler la qualité du code ;
+- `make doc` pour vérifier que la documentation est générable.
+
+Ainsi, les tests et la génération de documentation seront vérifiés
+automatiquement avant l'intégration d'une modification.
+
 ---
 
 ## 12. Commandes `make`
