@@ -13,3 +13,21 @@ select = [
 markers = [
     "performance: tests that measure execution time",
 ]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "tests/*",
+    "**/tests/*",
+    "**/__pycache__/*",
+    "*.pyc",
+    ".venv/*",
+    "**/.venv/*",
+    "build/*",
+    "dist/*",
+    "htmlcov/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90

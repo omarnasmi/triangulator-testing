@@ -23,6 +23,7 @@ def encode_point_set(points):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_returns_points_on_success(mock_get):
+"""Test test fetch point set returns points on success."""
     points = [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0)]
 
     response = Mock()
@@ -38,6 +39,7 @@ def test_fetch_point_set_returns_points_on_success(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_handles_not_found(mock_get):
+"""Test test fetch point set handles not found."""
     response = Mock()
     response.status_code = 404
     mock_get.return_value = response
@@ -48,6 +50,7 @@ def test_fetch_point_set_handles_not_found(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_handles_bad_request(mock_get):
+"""Test test fetch point set handles bad request."""
     response = Mock()
     response.status_code = 400
     mock_get.return_value = response
@@ -58,6 +61,7 @@ def test_fetch_point_set_handles_bad_request(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_handles_service_unavailable(mock_get):
+"""Test test fetch point set handles service unavailable."""
     response = Mock()
     response.status_code = 503
     mock_get.return_value = response
@@ -68,6 +72,7 @@ def test_fetch_point_set_handles_service_unavailable(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_handles_connection_failure(mock_get):
+"""Test test fetch point set handles connection failure."""
     mock_get.side_effect = requests.ConnectionError("Connection failed")
 
     with pytest.raises(Exception):
@@ -76,6 +81,7 @@ def test_fetch_point_set_handles_connection_failure(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_handles_timeout(mock_get):
+"""Test test fetch point set handles timeout."""
     mock_get.side_effect = requests.Timeout("Request timed out")
 
     with pytest.raises(Exception):
@@ -84,6 +90,7 @@ def test_fetch_point_set_handles_timeout(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_rejects_incomplete_binary_data(mock_get):
+"""Test test fetch point set rejects incomplete binary data."""
     response = Mock()
     response.status_code = 200
 
@@ -98,6 +105,7 @@ def test_fetch_point_set_rejects_incomplete_binary_data(mock_get):
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_rejects_inconsistent_point_count(mock_get):
     # Declares two points but contains coordinates for only one.
+"""Test test fetch point set rejects inconsistent point count."""
     response = Mock()
     response.status_code = 200
     response.content = struct.pack("<Iff", 1, 2.0, 3.0)[:-1]
@@ -109,6 +117,7 @@ def test_fetch_point_set_rejects_inconsistent_point_count(mock_get):
 
 @patch("triangulator.point_set_manager.requests.get")
 def test_fetch_point_set_requests_the_correct_point_set(mock_get):
+"""Test test fetch point set requests the correct point set."""
     response = Mock()
     response.status_code = 200
     response.content = encode_point_set([(2.0, 3.0)])
